@@ -20,8 +20,12 @@ repositories {
 }
 
 dependencies {
-  	compile   group:  'com.netflix.zuul', name: 'zuul-core', version: '1.0.28'
-   	compile   group:  'com.netflix.zuul', name: 'zuul-netflix', version: '1.0.28'
+  	compile ('com.netflix.zuul:zuul-core:1.0.28'){
+  		exclude  group: 'org.codehaus.groovy'
+  	}
+  	compile ('com.netflix.zuul:zuul-netflix:1.0.28'){
+  		exclude  group: 'org.codehaus.groovy'
+  	}
    	
    
     compile group: 'com.netflix.karyon', name: 'karyon2-archaius', version: '2.2.0-rc.2'
@@ -35,6 +39,8 @@ dependencies {
     compile 'com.sun.jersey:jersey-server:1.9'
     compile 'com.sun.jersey:jersey-client:1.9'
     compile 'com.sun.jersey:jersey-servlet:1.9'
+    
+    compile "org.codehaus.groovy:groovy-all:2.3.6"
 
 
     compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
@@ -46,6 +52,9 @@ test {
 }
 
 war {
+    from ('webapp'){
+       include 'index.html'
+    }
     webXml = file('src/main/webapp/WEB-INF/web.xml')
     webInf{
         from('src/main/groovy/filters') {
@@ -58,6 +67,7 @@ jettyRun.contextPath = '/'
 
 jettyRun.doFirst {
     System.setProperty("archaius.deployment.applicationId", "zuul")
+    System.setProperty("zuul.filter.root", "src/main/groovy/filters")
 }
 
 uploadArchives {

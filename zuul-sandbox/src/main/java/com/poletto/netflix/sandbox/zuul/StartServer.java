@@ -1,7 +1,6 @@
 package com.poletto.netflix.sandbox.zuul;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.io.File;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -9,9 +8,13 @@ import javax.servlet.ServletContextListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.netflix.zuul.FilterFileManager;
+import com.netflix.zuul.FilterLoader;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.filters.FilterRegistry;
+import com.netflix.zuul.groovy.GroovyCompiler;
+import com.netflix.zuul.groovy.GroovyFileFilter;
 import com.netflix.zuul.monitoring.CounterFactory;
 import com.netflix.zuul.monitoring.TracerFactory;
 import com.netflix.zuul.plugins.Counter;
@@ -31,8 +34,25 @@ public class StartServer implements ServletContextListener  {
 		
 		logger.info("Registering Servo Counter");
 		CounterFactory.initialize(new Counter());
-		initJavaFilters();
+		
+		 initGroovyFilterManager();
+		
+	//	initJavaFilters();
 	}
+	
+	private void initGroovyFilterManager() {
+        FilterLoader.getInstance().setCompiler(new GroovyCompiler());
+
+        String scriptRoot = System.getProperty("zuul.filter.root", "");
+        if (scriptRoot.length() > 0) scriptRoot = scriptRoot + File.separator;
+        try {
+            FilterFileManager.setFilenameFilter(new GroovyFileFilter());
+            FilterFileManager.init(5, scriptRoot + "pre", scriptRoot + "route", scriptRoot + "post");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
@@ -84,6 +104,7 @@ public class StartServer implements ServletContextListener  {
 				return true;
 			}
 
+			
 			@Override
 			public Object run() {
 				logger.info("running javaPostFilter");
