@@ -1,0 +1,1 @@
+java -server -Xmx2048m -Xms128m -jar C:\workarea\SandBox\Diego-Pacheco-Sandbox\scripts\java\NetflixOSS-pocs\karyon-poc\build\libs\karyon-poc.jar 
