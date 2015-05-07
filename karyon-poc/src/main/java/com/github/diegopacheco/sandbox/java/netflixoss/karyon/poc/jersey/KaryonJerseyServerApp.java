@@ -28,7 +28,7 @@ public interface KaryonJerseyServerApp {
 	            bind(AuthenticationService.class).to(AuthenticationServiceImpl.class);
 //	            interceptorSupport().forUri("/*").intercept(LoggingInterceptor.class);
 //	            interceptorSupport().forUri("/math").interceptIn(AuthInterceptor.class);
-	            server().port(8888).threadPoolSize(200);
+	            server().port(8888).threadPoolSize(new Integer(System.getProperty("KARYON_THREAD_POOL").toString()));
 	        }
 	 }
 }
