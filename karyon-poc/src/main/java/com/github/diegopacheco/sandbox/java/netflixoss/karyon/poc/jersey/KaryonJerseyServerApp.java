@@ -1,5 +1,6 @@
 package com.github.diegopacheco.sandbox.java.netflixoss.karyon.poc.jersey;
 
+import netflix.adminresources.resources.KaryonWebAdminModule;
 import netflix.karyon.KaryonBootstrap;
 import netflix.karyon.ShutdownModule;
 import netflix.karyon.archaius.ArchaiusBootstrap;
@@ -15,7 +16,7 @@ import com.netflix.governator.annotations.Modules;
 @KaryonBootstrap(name = "simplemath-netflix-oss", healthcheck = HealthcheckResource.class)
 @Modules(include = {
         ShutdownModule.class,
-      //  KaryonWebAdminModule.class,
+        KaryonWebAdminModule.class,
         KaryonServoModule.class,
         KaryonJerseyModuleImpl.class
         //,KaryonEurekaModule.class 
