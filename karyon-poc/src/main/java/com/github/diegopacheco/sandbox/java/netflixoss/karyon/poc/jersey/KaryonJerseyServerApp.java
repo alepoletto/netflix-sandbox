@@ -30,7 +30,9 @@ public interface KaryonJerseyServerApp {
 //	            interceptorSupport().forUri("/math").interceptIn(AuthInterceptor.class);
 	            if ("".equals(System.getProperty("KARYON_THREAD_POOL").toString()) || System.getProperty("KARYON_THREAD_POOL").toString()==null)
 	            	System.setProperty("KARYON_THREAD_POOL", "100");
-	            server().port(8888).threadPoolSize(new Integer(System.getProperty("KARYON_THREAD_POOL").toString()));
+	            Integer tp = new Integer(System.getProperty("KARYON_THREAD_POOL").toString());
+	            server().port(8888).threadPoolSize(tp);
+	            System.out.println("KARYON_THREAD_POOL is: " +  tp);
 	        }
 	 }
 }
